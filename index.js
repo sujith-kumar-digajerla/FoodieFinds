@@ -91,13 +91,24 @@ async function FetchbyFiltr(veg, seat, lux) {
 }
 
 app.get('/restaurants/filter', async (req, res) => {
-  let isVeg = req.query.isVeg;
-  let hasOutdoorSeating = req.query.hasOutdoorSeating;
-  let isLuxury = req.query.isLuxury;
 
-  let result = await FetchbyFiltr(isVeg, hasOutdoorSeating, isLuxury);
+   try {
 
-  res.status(200).json(result);
+    let isVeg = req.query.isVeg;
+    let hasOutdoorSeating = req.query.hasOutdoorSeating;
+    let isLuxury = req.query.isLuxury;
+   
+    let result = await FetchbyFiltr(isVeg, hasOutdoorSeating, isLuxury);
+    if (result.length === 0) {
+      res.status(404).json('no data');
+   }
+   res.status(200).json(result);
+  
+  }
+  catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+  
 });
 
 async function sortbyRate() {
@@ -108,9 +119,19 @@ async function sortbyRate() {
 }
 
 app.get('/restaurants/sort-by-rating', async (req, res) => {
-  let result = await sortbyRate();
+  try {
+    let result = await sortbyRate();
 
-  res.status(200).json(result);
+    if (result.length === 0) {
+      res.status(404).json('no data');
+   }
+    res.status(200).json(result);
+
+  }
+   catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+  
 });
 
 async function FetchallDish() {
@@ -121,9 +142,18 @@ async function FetchallDish() {
 }
 
 app.get('/dishes', async (req, res) => {
-  let result = await FetchallDish();
 
-  res.status(200).json(result);
+  try {
+    let result = await FetchallDish();
+
+    if (result.length === 0) {
+      res.status(404).json('no data');
+   }
+    res.status(200).json(result);
+  }
+  catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 });
 
 async function FetchdishbyId(i) {
@@ -133,10 +163,21 @@ async function FetchdishbyId(i) {
   return { dishes: resp };
 }
 app.get('/dishes/details/:id', async (req, res) => {
-  let id = parseInt(req.params.id);
-  let result = await FetchdishbyId(id);
+  try {
+    let id = parseInt(req.params.id);
+    let result = await FetchdishbyId(id);
 
-  res.status(200).json(result);
+    if (result.length === 0) {
+      res.status(404).json('no data');
+   }
+    res.status(200).json(result);
+  }
+  catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+  
+
+  
 });
 
 async function FetchdishbyVeg(v) {
@@ -147,11 +188,19 @@ async function FetchdishbyVeg(v) {
 }
 
 app.get('/dishes/filter', async (req, res) => {
-  let isVeg = req.query.isVeg;
 
-  let result = await FetchdishbyVeg(isVeg);
+  try {
+    let isVeg = req.query.isVeg;
 
-  res.status(200).json(result);
+    let result = await FetchdishbyVeg(isVeg);
+    if (result.length === 0) {
+      res.status(404).json('no data');
+   }
+    res.status(200).json(result);
+  }
+  catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 });
 
 async function SortbyPrice() {
@@ -162,8 +211,17 @@ async function SortbyPrice() {
 }
 
 app.get('/dishes/sort-by-price', async (req, res) => {
-  let result = await SortbyPrice();
-  res.status(200).json(result);
+  try {
+    let result = await SortbyPrice();
+
+    if (result.length === 0) {
+      res.status(404).json('no data');
+   }
+    res.status(200).json(result);
+  }
+  catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 });
 
 app.listen(port, () => {
